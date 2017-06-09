@@ -1048,7 +1048,7 @@ main(int argc,char **argv)
     prs_arg.ncap_pop_dmn_cmn();
 
     for(idx=0; idx<nbr_var_fix;idx++) {
-      // wrn_prn("ncap2", "about to chunk " + SCS(var_fix[idx]->nm) );
+      wrn_prn("ncap2", "about to chunk " + SCS(var_fix[idx]->nm) );
       prs_arg.ncap_pop_var_dmn_cmn(var_fix[idx], cmn);
 
       /*

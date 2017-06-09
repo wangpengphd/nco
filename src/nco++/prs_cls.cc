@@ -467,14 +467,20 @@ prs_cls::ncap_var_write_omp(
       (void)nco_inq_format(out_id,&fl_fmt);
       if( (fl_fmt == NC_FORMAT_NETCDF4 || fl_fmt == NC_FORMAT_NETCDF4_CLASSIC) && var->nbr_dim > 0)
       {
+        dmn_cmn_sct cmn[NC_MAX_DIMS];
+        ncap_pop_dmn_cmn();
+        ncap_pop_var_dmn_cmn(var, cmn);
+        (void)nco_cnk_sz_set_trv(in_id,out_id,cnk_in, var->nm,cmn);
+
+
 
           int flg_cnk;
 	      if(dfl_lvl >= 0)
-            (void)nco_def_var_deflate(out_id,var_out_id,var->shuffle,(int)True,dfl_lvl);
+            (void)nco_def_var_deflate(out_id,var_out_id,var->shuffle, True,dfl_lvl);
           else if(var->dfl_lvl >= 0)
-            (void)nco_def_var_deflate(out_id,var_out_id,var->shuffle,(int)True,var->dfl_lvl);
+            (void)nco_def_var_deflate(out_id,var_out_id,var->shuffle, True,var->dfl_lvl);
 
-          /* remember ncap_get_cnk_sz can set var->cnk_sz */
+        /*
           flg_cnk=ncap_get_cnk_sz(var);
 
           for(idx=0;idx<var->nbr_dim;idx++)
@@ -486,7 +492,7 @@ prs_cls::ncap_var_write_omp(
             (void)nco_def_var_chunking(out_id,var_out_id,(int)NC_CHUNKED,var->cnk_sz);
           else
             (void)nco_def_var_chunking(out_id,var_out_id,(int)NC_CONTIGUOUS,var->cnk_sz);
-
+        */
 
 	  } /* endif netCDF4 */
 
@@ -598,9 +604,16 @@ void prs_cls::ncap_def_ntl_scn(void) {
         if ((fl_fmt == NC_FORMAT_NETCDF4 || fl_fmt == NC_FORMAT_NETCDF4_CLASSIC) && var1->nbr_dim)
         {
           // use chunking inheritance
-          if(cnk_in->cnk_plc== nco_cnk_plc_xst) {
+          if(1 || cnk_in->cnk_plc== nco_cnk_plc_nil) {
             ncap_pop_var_dmn_cmn(var1, cmn);
             (void)nco_cnk_sz_set_trv(in_id,out_id,cnk_in, var1->nm,cmn);
+
+            if (dfl_lvl >= 0)
+              (void) nco_def_var_deflate(out_id, var_id, var1->shuffle,  True, dfl_lvl);
+            else if (var1->dfl_lvl >= 0)
+              (void) nco_def_var_deflate(out_id, var_id, var1->shuffle, True, var1->dfl_lvl);
+
+
 
           }else{
             int flg_cnk;
