@@ -1,7 +1,11 @@
+2017-06-13  Charlie Zender  <zender@uci.edu>
+
+	* Make dt_fmt automatically set PRN_CLN_LGB and obviate redundant --cal
+
 2017-06-11  Charlie Zender  <zender@uci.edu>
 
 	* Temporary fix to TODO nco1137 ncwa chunking fails with --rdd reported by Joy 20170605
-	dmn_cmn[] contains zero for some dimensions with --rdd, so set minimum cnk_sz to 1
+	dmn_cmn[] contains zero for some dimensions with --rdd, so set minimum cnk_sz to 1L
 
 2017-06-09  Charlie Zender  <zender@uci.edu>
 
