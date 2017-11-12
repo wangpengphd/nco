@@ -1396,7 +1396,10 @@ nco_inq_dim(const int nc_id,const int dmn_id,char *dmn_nm,long *dmn_sz)
   /* Purpose: Wrapper for nc_inq_dim() */
   const char fnc_nm[]="nco_inq_dim()";
   int rcd;
-  rcd=nc_inq_dim(nc_id,dmn_id,dmn_nm,(size_t *)dmn_sz);
+  size_t dmn_sz_t;
+  if(dmn_sz) dmn_sz_t=*dmn_sz;
+  rcd=nc_inq_dim(nc_id,dmn_id,dmn_nm,&dmn_sz_t);
+  if(dmn_sz) *dmn_sz=(long)dmn_sz_t;
   if(rcd == NC_EBADDIM){
     (void)fprintf(stdout,"ERROR: %s reports requested dimension \"%s\" is not in input file\n",fnc_nm,dmn_nm);
     nco_err_exit(rcd,fnc_nm);
