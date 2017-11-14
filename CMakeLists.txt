@@ -104,6 +104,7 @@ endif()
 #netCDF
 #Check for several functions in the netCDF library; define C macro accordingly
 #CMAKE_REQUIRED_LIBRARIES needs NETCDF_LIBRARY
+#check for header file netcdf_mem.h existence
 #/////////////////////////////////////////////////////////////////////////////////////
 
 set(CMAKE_REQUIRED_LIBRARIES ${NETCDF_LIBRARY})
@@ -119,19 +120,27 @@ if (has_nc_inq_format)
   add_definitions(-DHAVE_NC_INQ_FORMAT)
 endif()
 
+find_path(netcdf_mem_h netcdf_mem.h)
+if (netcdf_mem_h)
+  message("-- Found netcdf_mem.h in: " ${netcdf_mem_h})
+  add_definitions(-DHAVE_NETCDF_MEM_H)
+else()
+  message("-- NetCDF diskless functionaliy not available, netcdf_mem.h does not exist")
+endif()
+
 #/////////////////////////////////////////////////////////////////////////////////////
 #HDF5
 #/////////////////////////////////////////////////////////////////////////////////////
 
 
-find_library(HDF5_LIBRARY NAMES hdf5 ${find_opt})
+find_library(HDF5_LIBRARY NAMES hdf5 PATHS "/usr/lib/x86_64-linux-gnu/hdf5/serial")
 if(NOT HDF5_LIBRARY)
   message(FATAL_ERROR "${color_red}hdf5 library not found${color_reset}")
 else()
   message("-- Found hdf5 library at: " ${HDF5_LIBRARY})
 endif()
 
-find_library(HDF5_HL_LIBRARY NAMES hdf5_hl ${find_opt})
+find_library(HDF5_HL_LIBRARY NAMES hdf5_hl PATHS "/usr/lib/x86_64-linux-gnu/hdf5/serial")
 if(NOT HDF5_HL_LIBRARY)
   message(FATAL_ERROR "${color_red}hdf5 high level library not found${color_reset}")
 else()

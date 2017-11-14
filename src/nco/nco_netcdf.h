@@ -344,7 +344,7 @@ int nco_sync(const int nc_id);
 int nco_abort(const int nc_id);
 int nco_close(const int nc_id);
 int nco_inq(const int nc_id,int * const dmn_nbr_fl,int * const var_nbr_fl,int * const att_glb_nbr,int * const rec_dmn_id);
-  /* NB: nc_inq_path() introduced in netCDF 4.3.2, but NC_LIB_VERSION does not work until netCDF 4.4.0 */
+  /* NB: nc_inq_path() introduced in netCDF 4.3.2, but   NC_LIB_VERSION does not work until netCDF 4.4.0 */
 #ifndef HAVE_NC_INQ_PATH
   int nc_inq_path(const int nc_id,size_t * const pathlen,char * const path);
 #endif /* !HAVE_NC_INQ_PATH */
@@ -457,8 +457,18 @@ int nco_get_att(const int nc_id,const int var_id,const char * const att_nm,void 
 #ifndef NC_HAVE_RENAME_GRP
   int nc_rename_grp(int grp_id,const char * const grp_nm);
 #endif /* NC_HAVE_RENAME_GRP */
-#if NC_LIB_VERSION >= 440
-# include <netcdf_mem.h> /* nc_open_mem() */	 
+  /* nc_open_mem() is defined in netCDF >= 4.4.0, however ...
+     Ubuntu (Xenial at least) used broken netCDF CMake (not autoconf) to package 4.4.0 (it does not install netcdf_mem.h):
+     https://github.com/nco/nco/issues/44
+     Symptom of "missing netcdf_mem.h" and/or "unresolved nc_open_mem()" occurs with NCO 4.6.2+
+     Until 20171112 we used (Option 1): 
+     #if NC_LIB_VERSION >= 440 
+     which forces Ubuntu netCDF 4.4.0 users to build netCDF with autoconf and install, e.g., into /usr/local
+     Option 2 is to add test/symbol in build-engine, e.g., 
+     #if defined(HAVE_NETCDF_MEM_H)
+     which requires additional build tests in Autoconf/CMake/Makefile */
+#ifdef HAVE_NETCDF_MEM_H
+# include <netcdf_mem.h> /* nc_open_mem() defined in netCDF >= 4.4.0 */
 #else /* 4.4.0 */
   int nc_open_mem(const char * const fl_nm,const int mode,const size_t sz,void * const void_ptr,int * const nc_id);
 #endif /* 4.4.0 */
