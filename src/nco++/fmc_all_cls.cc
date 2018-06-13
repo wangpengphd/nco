@@ -5491,9 +5491,12 @@ var_sct *vlist_cls::push_fnd(bool &, std::vector<RefAST> &vtr_args, fmc_cls &fmc
   else if(lcl_type==VSTRING)
   {
     char *cp;
+	std::string s_tmp;
     nco_string val_string;
+	 
+	s_tmp = vtr_args[0]->getText();
+    cp = strdup(s_tmp.c_str());
 
-    cp = strdup(vtr_args[0]->getText().c_str());          
     (void)sng_ascii_trn(cp);            
     val_string=cp; 
     var_att=ncap_sclr_var_mk("~zz@print_methods", val_string); 
@@ -5550,12 +5553,13 @@ var_sct *vlist_cls::push_fnd(bool &, std::vector<RefAST> &vtr_args, fmc_cls &fmc
 
    const char *var_nm;
    NcapVar *Nvar;
-   var_nm=vtr_args[0]->getText().c_str();
+   std::string s_var_nm;
 
-   Nvar=prs_arg->var_vtr.find(var_nm);
+   s_var_nm = vtr_args[0]->getText();
 
-  
-    
+   var_nm=s_var_nm.c_str();
+
+   Nvar=prs_arg->var_vtr.find(s_var_nm.c_str());
 
    if(Nvar && Nvar->flg_stt==2)
      fl_id=prs_arg->out_id;   
