@@ -1400,10 +1400,11 @@ static std::vector<std::string> lpp_vtr;
         int ityp;  
         int dCall;  
         long sz;
-         
+        std::string s_dtyp=dtyp->getText();
+        
         // 0 - specific - UNLIMITED    
         // 1 - regular LIMITED or UNLIMITED
-        dCall=atoi(dtyp->getText().c_str());    
+        dCall=atoi(s_dtyp.c_str());    
         iret=DEFDIM;
  
         var=nco_var_cnf_typ((nc_type)NC_INT64,var);
@@ -1614,10 +1615,11 @@ var=NULL_CEWI;
             //In Initial scan all newly defined atts are flagged as Undefined
             var_sct *var1;
             NcapVar *Nvar;
+            std::string att_nm=att->getText();
 
             if(nco_dbg_lvl_get() > nco_dbg_var) dbg_prn(fnc_nm,att->getText());
             
-            var1=ncap_var_udf(att->getText().c_str());
+            var1=ncap_var_udf(att_nm.c_str());
 
             Nvar=new NcapVar(var1);
             prs_arg->int_vtr.push_ow(Nvar);          
@@ -1638,10 +1640,11 @@ var=NULL_CEWI;
         //In Initial scan all newly defined atts are flagged as Undefined
         var_sct *var1;
         NcapVar *Nvar;
+        std::string att2_nm=att2->getText();
 
         if(nco_dbg_lvl_get() > nco_dbg_var) dbg_prn(fnc_nm,att2->getText());
       
-        var1=ncap_var_udf(att2->getText().c_str());
+        var1=ncap_var_udf(att2_nm.c_str());
 
         Nvar=new NcapVar(var1);
         prs_arg->int_vtr.push_ow(Nvar);          
@@ -2716,14 +2719,15 @@ out returns [var_sct *var]
 	|   v:VAR_ID       
         { 
           //dbg_prn(fnc_nm,"getting regular var in out "+v->getText());
-   
+          std::string v_nm=v->getText();
+          
           var=prs_arg->ncap_var_init(v->getText(),true);
 
          // initial scan 
          if(prs_arg->ntl_scn)  
          {  
            if(var==NULL)     
-              var=ncap_var_udf(v->getText().c_str());
+              var=ncap_var_udf(v_nm.c_str());
            else if(bcst && var_cst && var->sz >1)      
               var=ncap_cst_do(var,var_cst,prs_arg->ntl_scn);  
          } 
@@ -2789,8 +2793,10 @@ out returns [var_sct *var]
             /* use malloc here rather than strdup(str->getText().c_str()) as this causes 
                an invalid-read when using GCC compiler */ 
             char *tsng;
+            std::string str_nm=str->getText(); 
+            
             tsng=(char*)nco_malloc(str->getText().size()+1);    
-            strcpy(tsng, str->getText().c_str());
+            strcpy(tsng, str_nm.c_str());
             (void)sng_ascii_trn(tsng);            
             var=(var_sct *)nco_malloc(sizeof(var_sct));
             /* Set defaults */
@@ -2815,8 +2821,10 @@ out returns [var_sct *var]
     |   str1:N4STRING
         {
             char *tsng;
+            std::string str1_nm=str1->getText();  
+            
             tsng=(char*)nco_malloc(str1->getText().size()+1);    
-            strcpy(tsng, str1->getText().c_str());
+            strcpy(tsng, str1_nm.c_str());
             (void)sng_ascii_trn(tsng);            
             var=(var_sct *)nco_malloc(sizeof(var_sct));
             /* Set defaults */
