@@ -39,6 +39,9 @@
 #ifndef NCO_NETCDF_H /* Contents have not yet been inserted in current source file */
 #define NCO_NETCDF_H
 
+#define NCO_ABORT_ON_ERROR 1
+
+
 /* Standard header files */
 #include <ctype.h> /* isalnum(), isdigit(), tolower() */
 #include <stdio.h> /* stderr, FILE, NULL, printf */

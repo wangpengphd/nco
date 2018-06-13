@@ -125,7 +125,11 @@ prs_cls::ncap_var_init(const std::string &snm,bool bfll){
     fl_id=out_id;  
 #endif
     
-    var=nco_var_fll(fl_id,var_id,var_nm,&dmn_out_vtr[0],dmn_out_vtr.size());
+    if( dmn_out_vtr.size()>0 ) 
+       var=nco_var_fll(fl_id,var_id,var_nm,&dmn_out_vtr[0],dmn_out_vtr.size());
+    else
+       var=nco_var_fll(fl_id,var_id,var_nm,(dmn_sct**)(NULL),dmn_out_vtr.size());
+    
     var->tally=(long *)NULL;
     /* Retrieve variable values from disk into memory */
     if(bfll) (void)nco_var_get(fl_id,var); 
@@ -199,8 +203,12 @@ prs_cls::ncap_var_init(const std::string &snm,bool bfll){
       (void)nco_enddef(out_id);
     } // end if 
   } // end if
-  
-  var=nco_var_fll(fl_id,var_id,var_nm,&dmn_out_vtr[0],dmn_out_vtr.size());
+
+ if( dmn_out_vtr.size()>0 ) 
+    var=nco_var_fll(fl_id,var_id,var_nm,&dmn_out_vtr[0],dmn_out_vtr.size());
+ else
+    var=nco_var_fll(fl_id,var_id,var_nm,(dmn_sct**)(NULL),dmn_out_vtr.size());
+
   /*  var->nm=(char *)nco_malloc((strlen(var_nm)+1UL)*sizeof(char));
       (void)strcpy(var->nm,var_nm); */
   /* Tally is not required yet since ncap does not perform cross-file operations (yet) */

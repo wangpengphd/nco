@@ -952,7 +952,7 @@ main(int argc,char **argv)
   var=(var_sct **)nco_malloc(xtr_nbr*sizeof(var_sct *));
   var_out=(var_sct **)nco_malloc(xtr_nbr*sizeof(var_sct *));
   for(idx=0;idx<xtr_nbr;idx++){
-    var[idx]=nco_var_fll(in_id,xtr_lst[idx].id,xtr_lst[idx].nm,&dmn_in_vtr[0],dmn_in_vtr.size());
+    var[idx]=nco_var_fll(in_id,xtr_lst[idx].id,xtr_lst[idx].nm,(dmn_in_vtr.size() ? &dmn_in_vtr[0] : (dmn_sct**)(NULL)) ,dmn_in_vtr.size());
     var_out[idx]=nco_var_dpl(var[idx]);
     (void)nco_xrf_var(var[idx],var_out[idx]);
     (void)nco_xrf_dmn(var_out[idx]);
