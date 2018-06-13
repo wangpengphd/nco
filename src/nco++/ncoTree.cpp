@@ -5761,7 +5761,7 @@ var_sct * ncoTree::var_lmt(ANTLR_USE_NAMESPACE(antlr)RefAST _t) {
 			
 			// Fudge -- fill out var again -but using dims defined in dmn_vtr
 			// We need data in var so that LHS logic in assign can access var shape 
-			var=nco_var_fll(fl_id,var_rhs->id,var_nm.c_str(), &dmn_vtr[0],dmn_vtr.size()); 
+			var=nco_var_fll(fl_id,var_rhs->id,var_nm.c_str(), (dmn_vtr.size() ? &dmn_vtr[0]: (dmn_sct**)NULL), dmn_vtr.size()); 
 			//var->sz*=2;
 			// Now get data from disk - use nco_var_get() 
 			(void)nco_var_get(fl_id,var); 
