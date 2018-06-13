@@ -73,7 +73,11 @@ nbr_err_ttl=0;
 {
   b0=gsl_sf_ellint_Kcomp(three_dmn_var_int/1000);
   b1=gsl_sf_ellint_P(0.5,2,time);
-  b2=gsl_sf_ellint_D(time/100,time,three_dmn_var_dbl);
+  
+  /*  gsl_sf_ellint_D not in gsl   v2.4.0 
+    b2=gsl_sf_ellint_D(time/100,time,three_dmn_var_dbl);
+  */ 
+  
   b3=gsl_sf_ellint_RD(bnd_var@double_att,time,three_dmn_var_dbl);
   b4=gsl_sf_ellint_RF(bnd_var@double_att,bnd_var@int_att,time);
   // takes four double args
@@ -88,12 +92,13 @@ nbr_err_ttl=0;
      print("ERROR: b1:Elliptical Integral functions\n");
      nbr_err++;	
   }
-
+  /*
+   gsl_sf_ellint_D not in gsl   v2.4.0   
   if( fabs(b2.total()-0.010359 ) >0.0001){
      print("ERROR: b2:Elliptical Integral functions\n");
      nbr_err++;	
   }
-
+  */
   if( fabs(b3.total()-0.94582 ) >0.001){
      print("ERROR: b3:Elliptical Integral functions\n");
      nbr_err++;	
