@@ -978,7 +978,17 @@ nco_cln_prs_tm /* UDUnits2 Extract time stamp from parsed UDUnits string */
 
   if(nco_dbg_lvl_get() >= nco_dbg_crr) (void)fprintf(stderr,"%s: INFO %s reports sscanf() converted %d values and it should have converted 6 values, format string=\"%s\"\n",nco_prg_nm_get(),fnc_nm,cnv_nbr,bfr);
 
-  bfr=(char *)nco_free(bfr);  
+
+#ifndef _MSC_VER
+  /*
+  fixme: 2018-06-20  
+  Windows doesnt like this "free()"  as it appears with a  udunits2.dll  the pointer somehow gets corrupted 
+     in the call to ut_format()    
+  please see the following issue on https://github.com/nco/nco/issues/91 
+  */
+  bfr=(char *)nco_free(bfr); 
+#endif
+
   ut_free(ut_sct_in);
   ut_free_system(ut_sys); /* Free memory taken by UDUnits library */
 
